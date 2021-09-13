@@ -31,6 +31,16 @@ public class Ninja implements GameObject {
     }
 
     @Override
+    public float getX() {
+        return sprite.getX();
+    }
+
+    @Override
+    public float getY() {
+        return sprite.getY();
+    }
+
+    @Override
     public void draw(SpriteBatch batch) {
         sprite.draw(batch);
     }

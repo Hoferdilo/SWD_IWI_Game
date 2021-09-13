@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 
-public class Zombie implements GameObject {
+public class Robot implements GameObject {
     private Sprite sprite;
     private float speed = MathUtils.random(30f, 60f);
 
-    public Zombie() {
-        Texture texture = AssetLoaderSingleton.getInstance().getZombieTexture();
+    public Robot() {
+        Texture texture = AssetLoaderSingleton.getInstance().getRobotTexture();
         sprite = new Sprite(texture);
         sprite.setSize(120f, 120f);
         sprite.flip(true, false);
