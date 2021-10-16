@@ -67,6 +67,10 @@ public class Main extends ApplicationAdapter {
 	}
 
 	private void handleInputs(float delta) {
+		if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+			moveDownCommand.setBooster();
+			moveUpCommand.setBooster();
+		}
 		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
 			moveDownCommand.execute();
 		}

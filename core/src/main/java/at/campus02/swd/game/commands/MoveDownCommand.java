@@ -2,7 +2,7 @@ package at.campus02.swd.game.commands;
 
 import at.campus02.swd.game.gameobjects.GameObject;
 
-public class MoveDownCommand implements PlayerCommand {
+public class MoveDownCommand extends Booster implements PlayerCommand {
     private final GameObject gameObject;
     private final float distance;
 
@@ -13,7 +13,7 @@ public class MoveDownCommand implements PlayerCommand {
 
     @Override
     public void execute() {
-        float newY = Math.max(0, gameObject.getY() - distance);
+        float newY = Math.max(0, gameObject.getY() - (distance + getBooster()));
         this.gameObject.setPosition(gameObject.getX(), newY);
     }
 }
