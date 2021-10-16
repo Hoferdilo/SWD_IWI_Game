@@ -1,17 +1,19 @@
 package at.campus02.swd.game.logging;
 
+import com.badlogic.gdx.math.Interpolation;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 
-public class PositionOutputCSV implements IPositionOutput {
+public class PositionOutputCSV {
 
     private PrintWriter printWriter;
 
-    public PositionOutputCSV() {
+    public PositionOutputCSV(String filename) {
         try{
-            FileWriter fw = new FileWriter(new File(System.getProperty("user.dir")+File.separator+"log.csv"));
+            FileWriter fw = new FileWriter(new File(System.getProperty("user.dir")+File.separator+filename+".csv"));
             printWriter = new PrintWriter(new BufferedWriter(fw));
         }
         catch(Exception ex) {
@@ -19,14 +21,9 @@ public class PositionOutputCSV implements IPositionOutput {
         }
     }
 
-    @Override
-    public void printPosition(float x, float y) {
-        if(x > 300) {
-            printWriter.println(String.format("%.2f;%.2f;", x,y).toCharArray());
-            printWriter.flush();
-        }
-        else {
-            System.out.format("Position ist %.2f/%.2f\n", x,y);
-        }
+    public void print(String output) {
+        printWriter.println(output);
+        System.out.println(output);
+        printWriter.flush();
     }
 }

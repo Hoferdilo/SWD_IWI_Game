@@ -3,6 +3,7 @@ package at.campus02.swd.game;
 import at.campus02.swd.game.commands.MoveDownCommand;
 import at.campus02.swd.game.commands.MoveUpCommand;
 import at.campus02.swd.game.gameobjects.*;
+import at.campus02.swd.game.logic.EnemyManager;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.utils.Array;
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
 	private SpriteBatch batch;
-	private final Array<GameObject> enemyGameObjects = new Array<>();
 	private final float updatesPerSecond = 60;
 	private final float logicFrameTime = 1 / updatesPerSecond;
 	private float deltaAccumulator = 0;
@@ -23,45 +23,34 @@ public class Main extends ApplicationAdapter {
 	private GameObject player;
 	private MoveDownCommand moveDownCommand;
 	private MoveUpCommand moveUpCommand;
+	private EnemyManager enemyManager;
 
 	@Override
 	public void create() {
 		AssetLoaderSingleton.getInstance().loadAssets();
-		gameObjectFactory = new RobotGameObjectFactory();
+		gameObjectFactory = new ZombieGameObjectFactory();
 		batch = new SpriteBatch();
 		player = gameObjectFactory.createGameObject(GameObjectType.PLAYER);
+		enemyManager = new EnemyManager(gameObjectFactory);
 		moveUpCommand = new MoveUpCommand(player, 10);
 		moveDownCommand = new MoveDownCommand(player, 10);
 		for(int i = 0; i < 10; i++) {
-			GameObject gameObject = gameObjectFactory.createGameObject(GameObjectType.ENEMY);
-			gameObject.setPosition(MathUtils.random(800), MathUtils.random(600-120));
-			enemyGameObjects.add(gameObject);
+			enemyManager.createEnemy();
 		}
 	}
 
 	private void act(float delta) {
 		handleInputs(delta);
-		Array<GameObject> toRemove = new Array<>();
-		for(GameObject gameObject : enemyGameObjects) {
-			gameObject.act(delta);
-			if(gameObject.getX() < 0) {
-				toRemove.add(gameObject);
-			}
+		enemyManager.act(delta);
+		int amountRemoved = enemyManager.removeFinishedEnemies();
+		for (int i = 0; i < amountRemoved; i++) {
+			enemyManager.createEnemy();
 		}
-		enemyGameObjects.removeAll(toRemove, true);
-		for(int i = 0; i < toRemove.size; i++) {
-			GameObject enemy = gameObjectFactory.createGameObject(GameObjectType.ENEMY);
-			enemy.setPosition(800, MathUtils.random(0, 600-120));
-			enemyGameObjects.add(enemy);
-		}
-		toRemove.clear();
 	}
 
 	private void draw() {
 		batch.begin();
-		for(GameObject gameObject : enemyGameObjects) {
-			gameObject.draw(batch);
-		}
+		enemyManager.drawEnemies(batch);
 		player.draw(batch);
 		batch.end();
 	}
@@ -76,6 +65,9 @@ public class Main extends ApplicationAdapter {
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
 			moveUpCommand.execute();
+		}
+		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+			enemyManager.tryExecuteEnemy(player.getX(), player.getY());
 		}
 	}
 

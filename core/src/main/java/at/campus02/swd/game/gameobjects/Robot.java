@@ -1,7 +1,7 @@
 package at.campus02.swd.game.gameobjects;
 
 import at.campus02.swd.game.AssetLoaderSingleton;
-import at.campus02.swd.game.logging.IPositionOutput;
+import at.campus02.swd.game.logging.IPositionOutputManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.MathUtils;
 public class Robot implements GameObject {
     private Sprite sprite;
     private float speed = MathUtils.random(30f, 60f);
-    private IPositionOutput positionOutput;
+    private IPositionOutputManager positionOutput;
 
-    public Robot(IPositionOutput positionOutput) {
+    public Robot(IPositionOutputManager positionOutput) {
         this.positionOutput = positionOutput;
         Texture texture = AssetLoaderSingleton.getInstance().getRobotTexture();
         sprite = new Sprite(texture);

@@ -1,7 +1,7 @@
 package at.campus02.swd.game.gameobjects;
 
 import at.campus02.swd.game.AssetLoaderSingleton;
-import at.campus02.swd.game.logging.IPositionOutput;
+import at.campus02.swd.game.logging.IPositionOutputManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -12,9 +12,9 @@ import org.graalvm.compiler.debug.CSVUtil;
 public class Zombie implements GameObject {
     private Sprite sprite;
     private float speed = MathUtils.random(30f, 60f);
-    private IPositionOutput positionOutput;
+    private IPositionOutputManager positionOutput;
 
-    public Zombie(IPositionOutput positionOutput) {
+    public Zombie(IPositionOutputManager positionOutput) {
         this.positionOutput = positionOutput;
         Texture texture = AssetLoaderSingleton.getInstance().getZombieTexture();
         sprite = new Sprite(texture);
