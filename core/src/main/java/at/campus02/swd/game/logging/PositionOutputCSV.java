@@ -13,7 +13,7 @@ public class PositionOutputCSV {
 
     public PositionOutputCSV(String filename) {
         try{
-            FileWriter fw = new FileWriter(new File(System.getProperty("user.dir")+File.separator+filename+".csv"));
+            FileWriter fw = new FileWriter(System.getProperty("user.dir")+File.separator+filename+".csv");
             printWriter = new PrintWriter(new BufferedWriter(fw));
         }
         catch(Exception ex) {

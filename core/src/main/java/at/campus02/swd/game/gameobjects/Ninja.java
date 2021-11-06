@@ -7,6 +7,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Ninja implements GameObject {
     private Sprite sprite;
+    private Weapon weapon;
+    private float health;
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+    }
 
     public enum Type {
         MALE,
@@ -38,6 +48,16 @@ public class Ninja implements GameObject {
     @Override
     public float getY() {
         return sprite.getY();
+    }
+
+    @Override
+    public float getHealth() {
+        return health;
+    }
+
+    @Override
+    public void damage(float dmg) {
+        health =- dmg;
     }
 
     @Override

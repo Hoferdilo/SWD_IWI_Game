@@ -13,6 +13,7 @@ public class Zombie implements GameObject {
     private Sprite sprite;
     private float speed = MathUtils.random(30f, 60f);
     private IPositionOutputManager positionOutput;
+    private float health;
 
     public Zombie(IPositionOutputManager positionOutput) {
         this.positionOutput = positionOutput;
@@ -20,6 +21,7 @@ public class Zombie implements GameObject {
         sprite = new Sprite(texture);
         sprite.setSize(120f, 120f);
         sprite.flip(true, false);
+        health = 10;
     }
 
     @Override
@@ -46,5 +48,15 @@ public class Zombie implements GameObject {
     @Override
     public float getY() {
         return sprite.getY();
+    }
+
+    @Override
+    public float getHealth() {
+        return health;
+    }
+
+    @Override
+    public void damage(float dmg) {
+        health =- dmg;
     }
 }

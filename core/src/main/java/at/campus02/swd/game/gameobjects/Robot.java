@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.MathUtils;
 
 public class Robot implements GameObject {
     private Sprite sprite;
+    private float health;
     private float speed = MathUtils.random(30f, 60f);
     private IPositionOutputManager positionOutput;
 
@@ -18,6 +19,7 @@ public class Robot implements GameObject {
         sprite = new Sprite(texture);
         sprite.setSize(120f, 120f);
         sprite.flip(true, false);
+        health = 10;
     }
 
     @Override
@@ -44,5 +46,15 @@ public class Robot implements GameObject {
     @Override
     public float getY() {
         return sprite.getY();
+    }
+
+    @Override
+    public float getHealth() {
+        return health;
+    }
+
+    @Override
+    public void damage(float dmg) {
+        health =- dmg;
     }
 }

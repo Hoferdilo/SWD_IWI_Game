@@ -7,5 +7,7 @@ public interface GameObject {
     void setPosition(float x, float y);
     float getX();
     float getY();
+    float getHealth();
+    void damage(float dmg);
     void draw(SpriteBatch batch);
 }
