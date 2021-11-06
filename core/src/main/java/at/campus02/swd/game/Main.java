@@ -5,15 +5,13 @@ import at.campus02.swd.game.commands.MoveDownCommand;
 import at.campus02.swd.game.commands.MoveUpCommand;
 import at.campus02.swd.game.gameobjects.*;
 import at.campus02.swd.game.logic.BasicEnemyStrategy;
-import at.campus02.swd.game.logic.EnemyManager;
-import at.campus02.swd.game.logic.IEnemyStrategy;
+import at.campus02.swd.game.logic.CreatureManager;
+import at.campus02.swd.game.observer.CreatureScore;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
@@ -22,38 +20,41 @@ public class Main extends ApplicationAdapter {
 	private final float logicFrameTime = 1 / updatesPerSecond;
 	private float deltaAccumulator = 0;
 	private AbstractGameObjectFactory gameObjectFactory;
+	private CreatureScore creatureScore;
 
-	private GameObject player;
 	private MoveDownCommand moveDownCommand;
 	private MoveUpCommand moveUpCommand;
 	private AttackCommand attackCommand;
-	private EnemyManager enemyManager;
+	private CreatureManager creatureManager;
+	private ProjectileManager projectileManager;
 
 	@Override
 	public void create() {
 		AssetLoaderSingleton.getInstance().loadAssets();
-		gameObjectFactory = new ZombieGameObjectFactory();
+		projectileManager = new ProjectileManager();
+		gameObjectFactory = new ZombieGameObjectFactory(projectileManager);
 		batch = new SpriteBatch();
-		player = gameObjectFactory.createGameObject(GameObjectType.PLAYER);
-		enemyManager = new EnemyManager(gameObjectFactory, new BasicEnemyStrategy());
-		Weapon weapon = new Sword(50, 10,enemyManager);
-		((Ninja)player).setWeapon(weapon);
-		weapon.setEquippedOn(player);
+		creatureManager = new CreatureManager(gameObjectFactory, new BasicEnemyStrategy());
+		CreatureGameObject player = creatureManager.initPlayer();
+		projectileManager.setCreatureManager(creatureManager);
 		moveUpCommand = new MoveUpCommand(player, 10);
 		moveDownCommand = new MoveDownCommand(player, 10);
 		attackCommand = new AttackCommand((Ninja)player);
-		enemyManager.init();
+		creatureScore = new CreatureScore();
+		creatureManager.attachCreatureDeathObserver(creatureScore);
+		creatureManager.init();
 	}
 
 	private void act(float delta) {
 		handleInputs(delta);
-		enemyManager.act(delta);
+		creatureManager.act(delta);
+		projectileManager.act(delta);
 	}
 
 	private void draw() {
 		batch.begin();
-		enemyManager.drawEnemies(batch);
-		player.draw(batch);
+		creatureManager.drawEnemies(batch);
+		projectileManager.drawProjectiles(batch);
 		batch.end();
 	}
 
@@ -63,13 +64,13 @@ public class Main extends ApplicationAdapter {
 			moveUpCommand.setBooster();
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-			moveDownCommand.execute();
+			moveDownCommand.execute(delta);
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-			moveUpCommand.execute();
+			moveUpCommand.execute(delta);
 		}
 		if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-			attackCommand.execute();
+			attackCommand.execute(delta);
 		}
 	}
 

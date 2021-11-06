@@ -1,16 +1,14 @@
 package at.campus02.swd.game.gameobjects;
 
 public abstract class Weapon {
-    protected float range;
     protected GameObject equippedOn;
     protected float damage;
 
-    public Weapon(float range, float damage) {
-        this.range = range;
+    public Weapon(float damage) {
         this.damage = damage;
     }
 
-    public abstract void execute();
+    public abstract void execute(float delta);
 
     public void setEquippedOn(GameObject equippedOn) {
         this.equippedOn = equippedOn;

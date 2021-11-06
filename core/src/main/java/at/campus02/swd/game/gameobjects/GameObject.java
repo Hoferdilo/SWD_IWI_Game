@@ -6,8 +6,11 @@ public interface GameObject {
     void act(float delta);
     void setPosition(float x, float y);
     float getX();
+    float getWidth();
     float getY();
+    float getHeight();
     float getHealth();
     void damage(float dmg);
     void draw(SpriteBatch batch);
+    GameObjectType getType();
 }

@@ -7,13 +7,15 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.sun.tools.jdeprscan.CSV;
-import org.graalvm.compiler.debug.CSVUtil;
 
-public class Zombie implements GameObject {
+import java.util.Random;
+
+public class Zombie implements CreatureGameObject {
     private Sprite sprite;
     private float speed = MathUtils.random(30f, 60f);
     private IPositionOutputManager positionOutput;
     private float health;
+    private Weapon weapon;
 
     public Zombie(IPositionOutputManager positionOutput) {
         this.positionOutput = positionOutput;
@@ -26,6 +28,9 @@ public class Zombie implements GameObject {
 
     @Override
     public void act(float delta) {
+        if(weapon != null) {
+            weapon.execute(0.0001f + (float)Math.random() * (0.001f - 0.0001f));
+        }
         sprite.setPosition(sprite.getX() - speed * delta, sprite.getY());
     }
 
@@ -41,13 +46,28 @@ public class Zombie implements GameObject {
     }
 
     @Override
+    public GameObjectType getType() {
+        return GameObjectType.ENEMY;
+    }
+
+    @Override
     public float getX() {
         return sprite.getX();
     }
 
     @Override
+    public float getWidth() {
+        return sprite.getWidth();
+    }
+
+    @Override
     public float getY() {
         return sprite.getY();
+    }
+
+    @Override
+    public float getHeight() {
+        return sprite.getHeight()-10;
     }
 
     @Override
@@ -58,5 +78,14 @@ public class Zombie implements GameObject {
     @Override
     public void damage(float dmg) {
         health =- dmg;
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
+        weapon.setEquippedOn(this);
     }
 }

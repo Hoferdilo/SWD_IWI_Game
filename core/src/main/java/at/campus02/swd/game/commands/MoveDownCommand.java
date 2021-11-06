@@ -12,7 +12,7 @@ public class MoveDownCommand extends Booster implements PlayerCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute(float delta) {
         float newY = Math.max(0, gameObject.getY() - (distance + getBooster()));
         this.gameObject.setPosition(gameObject.getX(), newY);
     }

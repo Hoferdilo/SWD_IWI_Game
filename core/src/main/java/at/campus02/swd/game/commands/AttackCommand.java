@@ -10,9 +10,9 @@ public class AttackCommand implements PlayerCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute(float delta) {
         if(this.player.getWeapon() != null) {
-            this.player.getWeapon().execute();
+            this.player.getWeapon().execute(delta);
         }
     }
 }
